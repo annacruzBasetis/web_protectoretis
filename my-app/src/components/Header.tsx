@@ -2,8 +2,8 @@ import Navbar from "./Navbar";
 
 const Header = () => {
   return (
-    <header className="header">
-      <Navbar></Navbar>
+    <header>
+      <Navbar/>
     </header>
   );
 }

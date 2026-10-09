@@ -1,14 +1,14 @@
 import Header from '../components/Header';
 
-const HomePage = () => {
+const MissingPage = () => {
   return (
     <>
       <Header/>
       <main>
-        <h1>HOMEPAGE</h1>
+        <h1>Missing PAGE</h1>
       </main>
     </>
   )
 }
 
-export default HomePage
+export default MissingPage

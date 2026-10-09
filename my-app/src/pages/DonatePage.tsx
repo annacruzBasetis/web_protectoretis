@@ -1,14 +1,14 @@
 import Header from '../components/Header';
 
-const HomePage = () => {
+const DonatePage = () => {
   return (
     <>
       <Header/>
       <main>
-        <h1>HOMEPAGE</h1>
+        <h1>Donate page</h1>
       </main>
     </>
   )
 }
 
-export default HomePage
+export default DonatePage

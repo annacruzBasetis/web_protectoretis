@@ -1,14 +1,14 @@
 import Header from '../components/Header';
 
-const HomePage = () => {
+const JoinPage = () => {
   return (
     <>
       <Header/>
       <main>
-        <h1>HOMEPAGE</h1>
+        <h1>Join PAGE</h1>
       </main>
     </>
   )
 }
 
-export default HomePage
+export default JoinPage

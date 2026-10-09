@@ -16,14 +16,14 @@ import { Link } from 'react-router-dom';
 
 
 const pages = [
-  { name: 'Adopta', path: '/adopta' },
-  { name: 'Nosotros', path: '/nosotros' },
-  { name: 'Se busca', path: '/se-busca' },
-  { name: 'Ayuda', path: '/ayuda' },
-  { name: 'Voluntariado', path: '/voluntariado' },
-  { name: 'Dona', path: '/dona' },
-  { name: 'Hazte socia', path: '/hazte-socia' },
-  { name: 'Contacto', path: '/contacto' },
+  { name: 'Adopta', path: '/adopt' },
+  { name: 'Nosotros', path: '/about' },
+  { name: 'Se busca', path: '/missing' },
+  { name: 'Ayuda', path: '/help' },
+  { name: 'Voluntariado', path: '/volunteering' },
+  { name: 'Dona', path: '/donate' },
+  { name: 'Hazte socia', path: '/join' },
+  { name: 'Contacto', path: '/contact' },
 ];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
@@ -50,25 +50,26 @@ function Navbar() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            LOGO
-          </Typography>
-
+          <Link to='/'>
+            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="#app-bar-with-responsive-menu"
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              LOGO
+            </Typography>
+          </Link>
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
