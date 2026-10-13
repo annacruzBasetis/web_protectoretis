@@ -1,3 +1,4 @@
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 const VolunteeringPage = () => {
@@ -7,6 +8,7 @@ const VolunteeringPage = () => {
       <main>
         <h1>Volunteering PAGE</h1>
       </main>
+      <Footer/>
     </>
   )
 }

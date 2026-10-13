@@ -52,7 +52,7 @@ function Navbar() {
   return (
     <AppBar
       position="static"
-      sx={{ borderRadius: "1rem", backgroundColor: "primary.main" }}
+      sx={{ borderRadius: "0 0 1rem 1rem", backgroundColor: "primary.main" }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -123,7 +123,7 @@ function Navbar() {
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
               fontWeight: 700,
-             // letterSpacing: ".3rem",
+              // letterSpacing: ".3rem",
               color: "text.primary",
               textDecoration: "none",
             }}

@@ -1,3 +1,4 @@
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 const MissingPage = () => {
@@ -7,6 +8,7 @@ const MissingPage = () => {
       <main>
         <h1>Missing PAGE</h1>
       </main>
+      <Footer/>
     </>
   )
 }

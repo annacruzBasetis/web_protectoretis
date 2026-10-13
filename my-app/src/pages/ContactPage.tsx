@@ -1,3 +1,4 @@
+import Footer from '../components/Footer';
 import Header from '../components/Header';
 
 const ContactPage = () => {
@@ -7,6 +8,7 @@ const ContactPage = () => {
       <main>
         <h1>Contact PAGE</h1>
       </main>
+      <Footer/>
     </>
   )
 }
