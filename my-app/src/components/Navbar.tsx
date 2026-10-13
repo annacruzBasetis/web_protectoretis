@@ -50,7 +50,10 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="static" sx={{ borderRadius: "1rem", boxShadow: 'none'}}>
+    <AppBar
+      position="static"
+      sx={{ borderRadius: "1rem", backgroundColor: "primary.main" }}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Link to="/">
@@ -70,7 +73,7 @@ function Navbar() {
                 textDecoration: "none",
               }}
             >
-              LOGO
+              Proaniplan
             </Typography>
           </Link>
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -111,7 +114,7 @@ function Navbar() {
           </Box>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
-            variant="h5"
+            variant="h2"
             noWrap
             component="a"
             href="#app-bar-with-responsive-menu"
@@ -119,14 +122,13 @@ function Navbar() {
               mr: 2,
               display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
+             // letterSpacing: ".3rem",
+              color: "text.primary",
               textDecoration: "none",
             }}
           >
-            LOGO
+            Proaniplan
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map(({ name, path }) => (
