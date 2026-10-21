@@ -13,3 +13,23 @@ class DummyTest {
         assertTrue(true);
     }
 }
+
+
+class UserServiceTest {
+
+	@Test
+    void ShouldCreateValidUser() {
+        //Arrange
+        UserName name = new UserName();
+        String email = new UserEmail();
+        String password = new UserPassword();
+
+        User user = new user(UserName, UserEmail, UserPassword);
+
+        //Act
+
+        //Assert
+    }
+
+
+}
