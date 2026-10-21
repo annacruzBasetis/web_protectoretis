@@ -1,4 +1,4 @@
-package com.example.protectoretis.entity;
+package com.basetis.protectoretis.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +10,7 @@ import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user")
+@Table(name = "\"user\"")
 public class User {
 
     @Id
@@ -25,8 +25,6 @@ public class User {
 
     @Column(nullable = false)
     private String password;
-
-    private String role;
 
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
@@ -69,14 +67,6 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public LocalDateTime getCreatedAt() {

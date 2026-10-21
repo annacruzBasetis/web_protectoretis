@@ -1,15 +1,15 @@
-package com.example.protectoretis.controller;
+package com.basetis.protectoretis.controller;
 
-import com.example.protectoretis.dto.UserCreateDto;
-import com.example.protectoretis.dto.UserResponseDto;
-import com.example.protectoretis.service.UserService;
+import com.basetis.protectoretis.dto.UserCreateDto;
+import com.basetis.protectoretis.dto.UserResponseDto;
+import com.basetis.protectoretis.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/createuser")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;

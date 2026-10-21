@@ -1,10 +1,10 @@
-package com.example.protectoretis.service;
+package com.basetis.protectoretis.service;
 
-import com.example.protectoretis.dto.UserCreateDto;
-import com.example.protectoretis.dto.UserResponseDto;
-import com.example.protectoretis.entity.User;
-import com.example.protectoretis.mapper.UserMapper;
-import com.example.protectoretis.repository.UserRepository;
+import com.basetis.protectoretis.dto.UserCreateDto;
+import com.basetis.protectoretis.dto.UserResponseDto;
+import com.basetis.protectoretis.entity.User;
+import com.basetis.protectoretis.mapper.UserMapper;
+import com.basetis.protectoretis.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

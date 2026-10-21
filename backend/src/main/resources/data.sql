@@ -2,11 +2,11 @@
 --                               DB SEEDING
 -- =============================================================================
 -- users
-INSERT INTO "user" (name, email, password, role, created_at) VALUES
-    ('Admin General', 'admin@example.com', 'scrypt_hashed_password_1', 'ADMIN', '2024-01-15 10:30:00'),
-    ('Carlos Blé', 'carlos@example.com', 'scrypt_hashed_password_2', 'ADMIN', '2024-02-01 14:15:00'),
-    ('Ana Martínez', 'ana.martinez@example.com', 'scrypt_hashed_password_3', 'USER', '2024-03-10 09:00:00'),
-    ('Laura Gómez', 'laura.gomez@example.com', 'scrypt_hashed_password_4', 'USER', CURRENT_TIMESTAMP)
+INSERT INTO "user" (name, email, password, created_at) VALUES
+    ('Admin General', 'admin@example.com', 'scrypt_hashed_password_1', '2024-01-15 10:30:00'),
+    ('Carlos Blé', 'carlos@example.com', 'scrypt_hashed_password_2', '2024-02-01 14:15:00'),
+    ('Ana Martínez', 'ana.martinez@example.com', 'scrypt_hashed_password_3', '2024-03-10 09:00:00'),
+    ('Laura Gómez', 'laura.gomez@example.com', 'scrypt_hashed_password_4', CURRENT_TIMESTAMP)
 ON CONFLICT (email) DO NOTHING;
 
 

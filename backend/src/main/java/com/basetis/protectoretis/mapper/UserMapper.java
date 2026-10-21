@@ -1,8 +1,8 @@
-package com.example.protectoretis.mapper;
+package com.basetis.protectoretis.mapper;
 
-import com.example.protectoretis.dto.UserCreateDto;
-import com.example.protectoretis.dto.UserResponseDto;
-import com.example.protectoretis.entity.User;
+import com.basetis.protectoretis.dto.UserCreateDto;
+import com.basetis.protectoretis.dto.UserResponseDto;
+import com.basetis.protectoretis.entity.User;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -12,8 +12,7 @@ public class UserMapper {
         User user = new User();
         user.setName(dto.name());
         user.setEmail(dto.email());
-        user.setPassword(dto.password()); // ENCRYPTTTTTT
-        user.setRole(dto.role());
+        user.setPassword(dto.password()); // ENCRYPTTTTTT TODO
         return user;
     }
 
@@ -22,7 +21,6 @@ public class UserMapper {
             entity.getId(),
             entity.getName(),
             entity.getEmail(),
-            entity.getRole(),
             entity.getCreatedAt()
         );
     }
