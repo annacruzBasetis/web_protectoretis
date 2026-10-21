@@ -1,0 +1,1 @@
+record Password(String value) {}

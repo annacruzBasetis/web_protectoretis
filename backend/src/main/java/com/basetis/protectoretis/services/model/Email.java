@@ -1,0 +1,1 @@
+record Email(String value) {}
