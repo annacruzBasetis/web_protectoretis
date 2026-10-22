@@ -1,6 +1,6 @@
 {
   "dependencies": {
-   
+    "mui-tel-input": "^11.0.0",
     "react-router-dom": "^7.18.4"
   }
 }

@@ -5,12 +5,11 @@ export default function Footer() {
     <Box
       component="footer"
       sx={{
-        position: "fixed",
+        
         bottom: 0,
         left: "50%",
-        transform: "translateX(-50%)", // Centra el footer en la pantalla
+        transform: "translateX(0%)", // Centra el footer en la pantalla
         width: "100%",
-        maxWidth: "800px", // 👈 Ancho máximo en píxeles deseado
         bgcolor: "primary.main",
         color: "primary.contrastText",
         py: 2,
