@@ -1,13 +1,12 @@
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import React, { useState } from 'react';
-import { Box, Container, Typography, TextField, Button, Alert, isEmpty } from '@mui/material';
+import { Box, Container, Typography, TextField, Button, Alert } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
-
 const ContactPage = () => {
-  //Estat per guardar el contingut del formulari
+  // Estats
   const [formData, setFormData] = useState({
     nom: '',
     email: '',
@@ -16,31 +15,26 @@ const ContactPage = () => {
     missatge: '',
   });
 
-  //Estat per missatge d'exit al enviar
   const [enviat, setEnviat] = useState(false);
   const [touched, setTouched] = useState(false);
 
-  //Funció que actualitza l'estat quan un usuari escriu en camps Textfield.
+  // Funció pels inpunts que no son el teléfon (Textfields)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
     });
-    if (formData.telefon.length !== 0) {
-    setTouched(true);
-    }
-    
   };
 
-  //Funció per MuiTelInput (rep directament el string amb el número)
+  // Rep directament el string amb el número
   const handlePhoneChange = (newPhone: string) => {
     setFormData({
       ...formData,
       telefon: newPhone,
     });
     
-    //Marquem com a "toched" quan l'usuari començi a escriure el teléfon
+    // Marquem com a "touched"
     if (newPhone.length > 0) {
       setTouched(true);
     } else {
@@ -48,18 +42,22 @@ const ContactPage = () => {
     }
   };
 
-  //Validació del telefon
+  // 4. Validació del teléfon
   const isPhoneInvalid = touched && formData.telefon !== '' && !matchIsValidTel(formData.telefon);
 
-  //Funció que gestiona el'enviament del form
+  // 5. Enviament del form
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    //TODO: conectar amb el backemd
+
+    // Si el telèfon no es vàlid, no s'envía
+    if (isPhoneInvalid) {
+      return;
+    }
+
     console.log('Dades enviades:', formData);
-    
-    //Mostra alerta d'exit i buida el form
+
     setEnviat(true);
+    setTouched(false);
     setFormData({
       nom: '',
       email: '',
@@ -73,10 +71,9 @@ const ContactPage = () => {
     <>
       <Header />
       <main>
-        {/* Capçalera sense imatge de fons*/}
+        {/* Capçalera */}
         <Box
           sx={{
-            
             py: 2,
             backgroundPosition: 'center',
             display: 'flex',
@@ -112,14 +109,14 @@ const ContactPage = () => {
               gap: 3,
             }}
           >
-            {/* Alerta d'enviament correcte*/}
+            {/* Alerta d'enviament correcte */}
             {enviat && (
               <Alert severity="success" onClose={() => setEnviat(false)}>
-                Moltes gràcies! El teu missatge s'ha enviat correctament
+                Moltes gràcies! El teu missatge s'ha enviat correctament.
               </Alert>
             )}
 
-            {/* Camp 1 */}
+            {/* Camp Nom */}
             <TextField
               label="Nom"
               name="nom"
@@ -129,9 +126,9 @@ const ContactPage = () => {
               fullWidth
             />
 
-            {/* Camp 2 */}
+            {/* Camp Email */}
             <TextField
-              label="Correu electrónic"
+              label="Correu electrònic"
               name="email"
               type="email"
               value={formData.email}
@@ -140,20 +137,19 @@ const ContactPage = () => {
               fullWidth
             />
 
-            {/* Camp 3 */}
+            {/* Camp Telèfon amb validació */}
             <MuiTelInput
               label="Telèfon (opcional)"
-              name="telefon"
-              error={isPhoneInvalid} 
               value={formData.telefon}
               onChange={handlePhoneChange}
-              helperText={isPhoneInvalid ? 'El número de telèfon no és válid' : ''}
+              error={isPhoneInvalid}
+              helperText={isPhoneInvalid ? 'El número de telèfon no és vàlid' : ''}
               preferredCountries={['ES']}
               defaultCountry="ES"
               fullWidth
             />
 
-            {/* Camp 4 */}
+            {/* Camp Assumpte */}
             <TextField
               label="Assumpte"
               name="assumpte"
@@ -163,7 +159,7 @@ const ContactPage = () => {
               fullWidth
             />
 
-            {/* Camp 5 */}
+            {/* Camp Missatge */}
             <TextField
               label="Missatge"
               name="missatge"
@@ -197,9 +193,9 @@ const ContactPage = () => {
           </Box>
         </Container>
       </main>
-      <Footer/>
+      <Footer />
     </>
-  )
-}
+  );
+};
 
-export default ContactPage
+export default ContactPage;
