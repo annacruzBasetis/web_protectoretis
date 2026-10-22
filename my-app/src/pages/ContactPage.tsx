@@ -6,7 +6,7 @@ import SendIcon from '@mui/icons-material/Send';
 import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
 const ContactPage = () => {
-  // 1. Estados
+  // Estats
   const [formData, setFormData] = useState({
     nom: '',
     email: '',
@@ -18,7 +18,7 @@ const ContactPage = () => {
   const [enviat, setEnviat] = useState(false);
   const [touched, setTouched] = useState(false);
 
-  // 2. Función para inputs normales (TextField)
+  // Funció pels inpunts que no son el teléfon (Textfields)
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -27,14 +27,14 @@ const ContactPage = () => {
     });
   };
 
-  // 3. Función específica para MuiTelInput (recibe directamente el string con el número)
+  // Rep directament el string amb el número
   const handlePhoneChange = (newPhone: string) => {
     setFormData({
       ...formData,
       telefon: newPhone,
     });
     
-    // Si el usuario empieza a escribir en el teléfono, marcamos como "tocado"
+    // Marquem com a "touched"
     if (newPhone.length > 0) {
       setTouched(true);
     } else {
@@ -42,14 +42,14 @@ const ContactPage = () => {
     }
   };
 
-  // 4. Validación del teléfono (solo es inválido si el usuario ha escrito algo Y el número no es válido)
+  // 4. Validació del teléfon
   const isPhoneInvalid = touched && formData.telefon !== '' && !matchIsValidTel(formData.telefon);
 
-  // 5. Envío del formulario
+  // 5. Enviament del form
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Evitamos enviar si el teléfono introducido no es válido
+    // Si el telèfon no es vàlid, no s'envía
     if (isPhoneInvalid) {
       return;
     }
@@ -116,7 +116,7 @@ const ContactPage = () => {
               </Alert>
             )}
 
-            {/* Camp 1: Nom */}
+            {/* Camp Nom */}
             <TextField
               label="Nom"
               name="nom"
@@ -126,7 +126,7 @@ const ContactPage = () => {
               fullWidth
             />
 
-            {/* Camp 2: Email */}
+            {/* Camp Email */}
             <TextField
               label="Correu electrònic"
               name="email"
@@ -137,19 +137,19 @@ const ContactPage = () => {
               fullWidth
             />
 
-            {/* Camp 3: Telèfon amb validació */}
+            {/* Camp Telèfon amb validació */}
             <MuiTelInput
               label="Telèfon (opcional)"
               value={formData.telefon}
               onChange={handlePhoneChange}
               error={isPhoneInvalid}
               helperText={isPhoneInvalid ? 'El número de telèfon no és vàlid' : ''}
-              preferredCountries={['ES']} // Muestra España primero por comodidad
+              preferredCountries={['ES']}
               defaultCountry="ES"
               fullWidth
             />
 
-            {/* Camp 4: Assumpte */}
+            {/* Camp Assumpte */}
             <TextField
               label="Assumpte"
               name="assumpte"
@@ -159,7 +159,7 @@ const ContactPage = () => {
               fullWidth
             />
 
-            {/* Camp 5: Missatge */}
+            {/* Camp Missatge */}
             <TextField
               label="Missatge"
               name="missatge"
