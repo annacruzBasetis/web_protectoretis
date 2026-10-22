@@ -106,7 +106,7 @@ const ImageCarousel = ({ fotos, nom }: { fotos: string[]; nom: string }) => {
   );
 };
 
-//Component per a cada card
+//Component per a cada card.
 const AnimalCard = ({ animal }: { animal: AdoptAnimal }) => {
   const [expanded, setExpanded] = useState(false);
 
