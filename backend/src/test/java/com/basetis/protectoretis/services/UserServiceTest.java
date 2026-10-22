@@ -1,35 +1,38 @@
-package com.example.protectoretis;
+package com.basetis.protectoretis.services;
 
+import com.basetis.protectoretis.services.model.*;
+import com.basetis.protectoretis.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-class DummyTest {
-
-    @Test
-    void sanityCheck() {
-        // Verifica que el runner de pruebas se ejecute correctamente
-        assertTrue(true);
-    }
-}
+import static org.mockito.Mockito.verify;
 
 
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-	@Test
+    @Mock
+    UserRepository userRepository;
+
+    @InjectMocks
+    UserService userService;
+
+    @Test
     void ShouldCreateValidUser() {
         //Arrange
-        UserName name = new UserName();
-        String email = new UserEmail();
-        String password = new UserPassword();
+        UserName name = new UserName("Jane Doe");
+        UserEmail email = new UserEmail("JD@gmail.com");
+        UserPassword password = new UserPassword("1234");
 
-        User user = new user(UserName, UserEmail, UserPassword);
+        User user = new User(name, email, password);
 
         //Act
+        userService.createUser(user);
 
         //Assert
+        verify(userRepository).createUser(user);
     }
-
-
 }
