@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Box, Container, Typography, Card, CardContent } from '@mui/material';
 import PetsIcon from '@mui/icons-material/Pets';
 import Header from '../components/Header';
