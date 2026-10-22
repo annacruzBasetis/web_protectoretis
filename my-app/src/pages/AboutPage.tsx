@@ -2,66 +2,81 @@ import React, { useState, useEffect } from 'react';
 import { Box, Container, Typography, Card, CardContent } from '@mui/material';
 import PetsIcon from '@mui/icons-material/Pets';
 import Header from '../components/Header';
-import Footer from '../components/Footer';
+import React, { useState } from 'react';
+import { Box, Container, Typography, TextField, Button, Alert } from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
+import { MuiTelInput, matchIsValidTel } from 'mui-tel-input';
 
-//Counter
-const CounterItem = ({ 
-  label, 
-  targetNumber, 
-  showPlus = false 
-}: { 
-  label: string; 
-  targetNumber: number; 
-  showPlus?: boolean 
-}) => {
-  const [count, setCount] = useState(0);
+const ContactPage = () => {
+  // 1. Estados
+  const [formData, setFormData] = useState({
+    nom: '',
+    email: '',
+    telefon: '',
+    assumpte: '',
+    missatge: '',
+  });
 
-  //El counter incrementa més rápid contra més alt es el valor.
-  useEffect(() => {
-    const step = Math.max(1, Math.floor(targetNumber / 50));
+  const [enviat, setEnviat] = useState(false);
+  const [touched, setTouched] = useState(false);
 
-    const timer = setInterval(() => {
-      setCount((prevCount) => {
-        if (prevCount + step < targetNumber) {
-          return prevCount + step;
-        } else {
-          clearInterval(timer);
-          return targetNumber;
-        }
-      });
-    }, 20);
+  // 2. Función para inputs normales (TextField)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
-    return () => clearInterval(timer);
-  }, [targetNumber]);
+  // 3. Función específica para MuiTelInput (recibe directamente el string con el número)
+  const handlePhoneChange = (newPhone: string) => {
+    setFormData({
+      ...formData,
+      telefon: newPhone,
+    });
+    
+    // Si el usuario empieza a escribir en el teléfono, marcamos como "tocado"
+    if (newPhone.length > 0) {
+      setTouched(true);
+    } else {
+      setTouched(false);
+    }
+  };
 
-  return (
-    <Box sx={{ textAlign: 'center', p: 2, flex: '1 1 150px' }}>
-      <Typography variant="h2" color="text.primary">
-        {showPlus ? `+${count}` : count}
-      </Typography>
-      <Typography variant="body1" color="text.secondary">
-        {label}
-      </Typography>
-    </Box>
-  );
-};
+  // 4. Validación del teléfono (solo es inválido si el usuario ha escrito algo Y el número no es válido)
+  const isPhoneInvalid = touched && formData.telefon !== '' && !matchIsValidTel(formData.telefon);
 
-const AboutPage = () => {
-  const casesAcollida = 45;
-  const animalsAdoptats = 320;
-  const voluntaris = 20;
-  const teamers = 111;
+  // 5. Envío del formulario
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Evitamos enviar si el teléfono introducido no es válido
+    if (isPhoneInvalid) {
+      return;
+    }
+
+    console.log('Dades enviades:', formData);
+
+    setEnviat(true);
+    setTouched(false);
+    setFormData({
+      nom: '',
+      email: '',
+      telefon: '',
+      assumpte: '',
+      missatge: '',
+    });
+  };
 
   return (
     <>
       <Header />
       <main>
-        {/* Capçalera amb png de fons */}
+        {/* Capçalera */}
         <Box
           sx={{
-            height: '300px',
-            backgroundImage: 'url(/Nosaltres.png)', //TODO: asignar imatge
-            backgroundSize: 'cover',
+            py: 2,
             backgroundPosition: 'center',
             display: 'flex',
             alignItems: 'center',
@@ -69,106 +84,115 @@ const AboutPage = () => {
           }}
         >
           <Typography variant="h1" sx={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.4)', p: 2, borderRadius: 2 }}>
-            Nosaltres
+            Contacte
           </Typography>
         </Box>
 
-        <Container sx={{ py: 5 }}>
-          <Box sx={{ mb: 5, textAlign: 'center' }}>
-            <Typography variant="body1">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        <Container maxWidth="md" sx={{ py: 0 }}>
+          {/* Text */}
+          <Box sx={{ mb: 2, textAlign: 'center' }}>
+            <Typography variant="body1" sx={{ fontSize: '1.15rem' }}>
+              Tens cap dubte, vols ser casa d'acollida o col·laborar amb la protectora?
+              Escriu-nos i et respondrem lo més aviat possible
             </Typography>
           </Box>
 
-         {/*Secció de Contadors*/}
+          {/* Form */}
           <Box
+            component="form"
+            onSubmit={handleSubmit}
             sx={{
               backgroundColor: 'white',
-              p: 3,
-              borderRadius: 2,
+              p: { xs: 3, sm: 6 },
+              borderRadius: 3,
               boxShadow: 1,
               display: 'flex',
-              flexWrap: 'wrap',
-              justifyContent: 'space-around',
-              mb: 6,
-            }}
-          >
-            <CounterItem label="Casas de acogida" targetNumber={casesAcollida} />
-            <CounterItem label="Animales adoptados" targetNumber={animalsAdoptats} />
-            <CounterItem label="Voluntarios" targetNumber= {voluntaris} showPlus={true}/>
-            <CounterItem label="Teamers" targetNumber={teamers} />
-          </Box>
-
-          {/*Cards amb Box de Flexbox per diseny responsive*/}
-          <Box
-            sx={{
-              display: 'flex',
-              flexWrap: 'wrap',
+              flexDirection: 'column',
               gap: 3,
-              mb: 6,
             }}
           >
-            {/*Card 1*/}
-            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 45%', md: '1 1 20%' } }}>
-              <Card sx={{ backgroundColor: 'primary.light', textAlign: 'center', p: 2, height: '100%' }}>
-                <PetsIcon sx={{ fontSize: 60, color: 'text.primary' }} />
-                <CardContent>
-                  <Typography variant="h3" sx={{ mb: 1 }}>
-                    Rescate
-                  </Typography>
-                  <Typography variant="body2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
+            {/* Alerta d'enviament correcte */}
+            {enviat && (
+              <Alert severity="success" onClose={() => setEnviat(false)}>
+                Moltes gràcies! El teu missatge s'ha enviat correctament.
+              </Alert>
+            )}
 
-            {/*Card 2*/}
-            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 45%', md: '1 1 20%' } }}>
-              <Card sx={{ backgroundColor: 'secondary.main', textAlign: 'center', p: 2, height: '100%' }}>
-                <PetsIcon sx={{ fontSize: 60, color: 'text.primary' }} />
-                <CardContent>
-                  <Typography variant="h3" sx={{ mb: 1 }}>
-                    Adopciones
-                  </Typography>
-                  <Typography variant="body2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
+            {/* Camp 1: Nom */}
+            <TextField
+              label="Nom"
+              name="nom"
+              value={formData.nom}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
 
-            {/*Card 3*/}
-            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 45%', md: '1 1 20%' } }}>
-              <Card sx={{ backgroundColor: 'primary.main', textAlign: 'center', p: 2, height: '100%' }}>
-                <PetsIcon sx={{ fontSize: 60, color: 'text.primary' }} />
-                <CardContent>
-                  <Typography variant="h3" sx={{ mb: 1 }}>
-                    Gestión de colonias
-                  </Typography>
-                  <Typography variant="body2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
+            {/* Camp 2: Email */}
+            <TextField
+              label="Correu electrònic"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
 
-            {/*Card 4*/}
-            <Box sx={{ flex: { xs: '1 1 100%', sm: '1 1 45%', md: '1 1 20%' } }}>
-              <Card sx={{ backgroundColor: 'secondary.dark', textAlign: 'center', p: 2, height: '100%' }}>
-                <PetsIcon sx={{ fontSize: 60, color: 'text.primary' }} />
-                <CardContent>
-                  <Typography variant="h3" sx={{ mb: 1 }}>
-                    Concienciación
-                  </Typography>
-                  <Typography variant="body2">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Box>
+            {/* Camp 3: Telèfon amb validació */}
+            <MuiTelInput
+              label="Telèfon (opcional)"
+              value={formData.telefon}
+              onChange={handlePhoneChange}
+              error={isPhoneInvalid}
+              helperText={isPhoneInvalid ? 'El número de telèfon no és vàlid' : ''}
+              preferredCountries={['ES']} // Muestra España primero por comodidad
+              defaultCountry="ES"
+              fullWidth
+            />
+
+            {/* Camp 4: Assumpte */}
+            <TextField
+              label="Assumpte"
+              name="assumpte"
+              value={formData.assumpte}
+              onChange={handleChange}
+              required
+              fullWidth
+            />
+
+            {/* Camp 5: Missatge */}
+            <TextField
+              label="Missatge"
+              name="missatge"
+              value={formData.missatge}
+              onChange={handleChange}
+              required
+              multiline
+              rows={5}
+              fullWidth
+            />
+
+            {/* Botó d'enviament */}
+            <Button
+              type="submit"
+              variant="contained"
+              size="large"
+              endIcon={<SendIcon />}
+              sx={{
+                mt: 2,
+                py: 1.5,
+                backgroundColor: 'primary.main',
+                color: 'text.primary',
+                fontWeight: 'bold',
+                '&:hover': {
+                  backgroundColor: 'primary.dark',
+                },
+              }}
+            >
+              Enviar missatge
+            </Button>
           </Box>
-
         </Container>
       </main>
       <Footer />
@@ -176,4 +200,4 @@ const AboutPage = () => {
   );
 };
 
-export default AboutPage;
+export default ContactPage;
