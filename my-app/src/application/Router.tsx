@@ -8,6 +8,7 @@ import HelpPage from "../pages/HelpPage";
 import JoinPage from "../pages/JoinPage";
 import MissingPage from "../pages/MissingPage";
 import VolunteeringPage from "../pages/VolunteeringPage";
+import DashPage  from "../pages/DashPage";
 
 const Router = () => {
   return (
@@ -22,6 +23,7 @@ const Router = () => {
                 <Route path='/join' element={<JoinPage/>}/>
                 <Route path='/missing' element={<MissingPage/>}/>
                 <Route path='/Volunteering' element={<VolunteeringPage/>}/>
+                <Route path='/dashboard' element={<DashPage/>}/>
             </Routes>
         </BrowserRouter>
   )

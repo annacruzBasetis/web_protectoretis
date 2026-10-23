@@ -1,0 +1,32 @@
+import { useEffect, useState } from "react";
+import Header from "../components/Header";
+
+const DashPage = () => {
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("http://localhost:8080/user/dashboard", {
+      method: "GET",
+      credentials: "include", // IMPORTANTE: Envía la cookie JSESSIONID de la sesión
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("No autenticado");
+        return res.json();
+      })
+      .then((data) => setUser(data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  if (!user) return <p>Cargando perfil...</p>;
+
+  return (
+    <div>
+      <Header/>
+      <h1>Bienvenido, {user.name}</h1>
+      <p>Email: {user.email}</p>
+      {user.picture && <img src={user.picture} alt="Avatar" width={80} />}
+    </div>
+  );
+};
+
+export default DashPage;
