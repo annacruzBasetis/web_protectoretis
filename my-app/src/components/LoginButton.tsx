@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 export const LoginButton = () => {
   const handleGoogleLogin = () => {
