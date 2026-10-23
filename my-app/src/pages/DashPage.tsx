@@ -9,6 +9,11 @@ const DashPage = () => {
       method: "GET",
       credentials: "include", // IMPORTANTE: Envía la cookie JSESSIONID de la sesión
     })
+      .then((res) => {
+        // Si el backend devuelve un 401/403, lanzamos error para ir al .catch()
+        if (!res.ok) throw new Error("Sesión no válida");
+        return res.json(); // 2. Convertimos la respuesta HTTP a JSON
+      })
       .then((data) => setUser(data))
       .catch((err) => {
             console.error(err);
