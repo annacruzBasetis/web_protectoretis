@@ -40,7 +40,7 @@ public class SecurityConfig {
                     .oidcUserService(customOAuth2UserService)
                 )
                 .defaultSuccessUrl("http://localhost:5173/user/dashboard", true)
-                .failureUrl("http://localhost:5173/?error=not_invited")
+                .failureUrl("http://localhost:5173/user/error")
                 
             
             )

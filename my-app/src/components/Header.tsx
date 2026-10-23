@@ -13,12 +13,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
+import {Auth} from '../services/Auth'
 
-
-interface HeaderProps {
-  user?: any;
-  onLogout?: () => void;
-}
 
 const pages = [
   { name: "Adopta", path: "/adopt" },
@@ -37,10 +33,9 @@ const settings = [
   { name: "Logout", path: "/logout"}
 ];
 
-function Header({ user, onLogout }: HeaderProps) {
-  const handleLogin = () => {
-    window.location.href = "http://localhost:8080/oauth2/authorization/google";
-  };
+function Header() {
+
+  const { user, login, logout } = Auth();
   
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
@@ -196,11 +191,11 @@ function Header({ user, onLogout }: HeaderProps) {
             </Box> 
             <Box sx={{ display: "flex", justifyContent: "space-between", padding: 2, alignItems: "center" }}>
                {user ? (
-                  <Button variant="contained" color="error" onClick={onLogout}>
+                  <Button variant="contained" color="error" onClick={logout}>
                     Logout
                   </Button>
                 ) : (
-                  <Button variant="contained" color="primary" onClick={handleLogin}>
+                  <Button variant="contained" color="primary" onClick={login}>
                     Login
                   </Button>
                 )}

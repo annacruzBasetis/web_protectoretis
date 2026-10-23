@@ -8,8 +8,8 @@ import HelpPage from "../pages/HelpPage";
 import JoinPage from "../pages/JoinPage";
 import MissingPage from "../pages/MissingPage";
 import VolunteeringPage from "../pages/VolunteeringPage";
-import DashPage  from "../pages/DashPage";
 import DashboardPage from "../pages/DashboardPage";
+import DashboardErrorPage from "../pages/DashboardErrorPage";
 
 const Router = () => {
   return (
@@ -23,9 +23,9 @@ const Router = () => {
                 <Route path='/help' element={<HelpPage/>}/>
                 <Route path='/join' element={<JoinPage/>}/>
                 <Route path='/missing' element={<MissingPage/>}/>
-                <Route path='/user/dashboard' element={<DashPage/>}/>
                 <Route path='/volunteering' element={<VolunteeringPage/>}/>
-                <Route path='/dashboard' element={<DashboardPage/>}/>
+                <Route path='/user/dashboard' element={<DashboardPage/>}/>
+                <Route path='/user/error' element={<DashboardErrorPage/>}/>
             </Routes>
         </BrowserRouter>
   )
