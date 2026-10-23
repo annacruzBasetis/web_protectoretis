@@ -10,10 +10,19 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import com.basetis.protectoretis.service.CustomOAuth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+        this.customOAuth2UserService = customOAuth2UserService;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -27,7 +36,12 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
+                .userInfoEndpoint(userInfo -> userInfo
+                    .oidcUserService(customOAuth2UserService)
+                )
                 .defaultSuccessUrl("http://localhost:5173/user/dashboard", true)
+                .failureUrl("http://localhost:5173/?error=not_invited")
+                
             
             )
             .logout(logout -> logout
