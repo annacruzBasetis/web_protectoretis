@@ -14,7 +14,10 @@ const DashPage = () => {
         return res.json();
       })
       .then((data) => setUser(data))
-      .catch((err) => console.error(err));
+      .catch((err) => {
+            console.error(err);
+            window.location.href = "http://localhost:8080/oauth2/authorization/google";
+});
   }, []);
 
   if (!user) return <p>Cargando perfil...</p>;

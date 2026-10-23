@@ -14,7 +14,7 @@ export const LoginButton = () => {
       onClick={handleGoogleLogin}
       sx={{ backgroundColor: "#4285F4", color: "#fff" }}
     >
-      Iniciar sesió amb Google
+      Login
     </Button>
   );
 };

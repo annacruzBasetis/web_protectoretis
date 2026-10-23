@@ -23,7 +23,7 @@ const Router = () => {
                 <Route path='/join' element={<JoinPage/>}/>
                 <Route path='/missing' element={<MissingPage/>}/>
                 <Route path='/Volunteering' element={<VolunteeringPage/>}/>
-                <Route path='/dashboard' element={<DashPage/>}/>
+                <Route path='/user/dashboard' element={<DashPage/>}/>
             </Routes>
         </BrowserRouter>
   )
