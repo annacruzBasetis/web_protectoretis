@@ -30,7 +30,12 @@ const pages = [
   { name: "Hazte socia", path: "/join" },
   { name: "Contacto", path: "/contact" },
 ];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = [
+  { name: "Profile", path: "/profile"},
+  { name: "Account", path: "/account"},
+  { name: "Dashboard", path: "/dashboard"},
+  { name: "Logout", path: "/logout"}
+];
 
 function Header({ user, onLogout }: HeaderProps) {
   const handleLogin = () => {
@@ -178,11 +183,13 @@ function Header({ user, onLogout }: HeaderProps) {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography sx={{ textAlign: "center" }}>
-                      {setting}
-                    </Typography>
+                {settings.map(({name, path}) => (
+                  <MenuItem key={name} onClick={handleCloseNavMenu}>
+                    <Link to={path}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        {name}
+                      </Typography>
+                    </Link>
                   </MenuItem>
                 ))}
               </Menu>
