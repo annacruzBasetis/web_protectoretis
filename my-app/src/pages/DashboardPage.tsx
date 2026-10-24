@@ -8,6 +8,8 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useAuth } from '../services/useAuth'
+import DashboardErrorPage from './DashboardErrorPage';
 
 
 interface AdminUser {
@@ -189,7 +191,19 @@ const DashboardPage = () => {
     handleCloseModal();
   };
 
+  const { user, loading } = useAuth();
 
+  if (loading) {
+    return <p>Comprobando sesión...</p>;
+  }
+
+  if (!user) {
+    return (
+      <>
+        <DashboardErrorPage/>
+      </>
+    )
+  }
 
   
 

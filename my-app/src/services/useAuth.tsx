@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 const API_URL = "http://localhost:8080";
 
 
-export const Auth = () => {
+export const useAuth = () => {
 
 
 const [user, setUser] = useState(null);
+const [loading, setLoading] = useState(true);
 
-const login = () => {
+const checkAuth = () => {
     fetch(`${API_URL}/user/dashboard`, {
       method: "GET",
       credentials: "include",
@@ -21,9 +22,18 @@ const login = () => {
       .then((data) => setUser(data))
       .catch((err) => {
             console.error(err);
-            window.location.href = `${API_URL}/oauth2/authorization/google`;
-      });
+            setUser(null);
+      })
+      .finally(() => setLoading(false));
 }
+
+useEffect(() => {
+    checkAuth();
+  }, []);
+
+const login = () => {
+    window.location.href = `${API_URL}/oauth2/authorization/google`;
+  };
 
 const logout = () => {
     fetch(`${API_URL}/logout`, {
@@ -38,7 +48,7 @@ const logout = () => {
       })
       .catch((err) => console.error(err));
 }
-return {user, login, logout};
+return { user, loading, login, logout, checkAuth };
 }
 
 

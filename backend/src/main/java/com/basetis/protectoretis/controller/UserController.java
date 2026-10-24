@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -28,9 +32,16 @@ public class UserController {
     }
 
     @GetMapping("/dashboard")
-    public Map<String, Object> getUserProfile(@AuthenticationPrincipal OAuth2User principal) {
-        // 'principal.getAttributes()' contiene el JSON con los datos devueltos por Google:
-        // email, name, picture, sub, etc.
-        return principal.getAttributes();
+    public ResponseEntity<?> getDashboardUser(@AuthenticationPrincipal OidcUser principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("name", principal.getAttribute("name"));
+        userData.put("email", principal.getAttribute("email"));
+
+
+        return ResponseEntity.ok(userData);
     }
 }

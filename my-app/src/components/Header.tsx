@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
-import {Auth} from '../services/Auth'
+import { useAuth } from '../services/useAuth'
 
 
 const pages = [
@@ -29,12 +29,12 @@ const pages = [
 const settings = [
   { name: "Profile", path: "/profile"},
   { name: "Account", path: "/account"},
-  { name: "Dashboard", path: "/dashboard"}
+  { name: "Dashboard", path: "/user/dashboard"}
 ];
 
 function Header() {
 
-  const { user, login, logout } = Auth();
+  const { user, login, logout } = useAuth();
   
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
