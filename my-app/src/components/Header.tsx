@@ -12,32 +12,44 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+// Modals centralitzats
+import { LoginModal } from "./LoginModal";
+import { ForgotPasswordModal } from "./ForgotPasswordModal";
 
 const pages = [
   { name: "Adopta", path: "/adopt" },
-  { name: "Nosotros", path: "/about" },
-  { name: "Se busca", path: "/missing" },
-  { name: "Ayuda", path: "/help" },
-  { name: "Voluntariado", path: "/volunteering" },
-  { name: "Dona", path: "/donate" },
-  { name: "Hazte socia", path: "/join" },
-  { name: "Contacto", path: "/contact" },
+  { name: "Nosaltres", path: "/about" },
+  { name: "Es busca", path: "/missing" },
+  { name: "Ajuda", path: "/help" },
+  { name: "Voluntariat", path: "/volunteering" },
+  { name: "Dóna", path: "/donate" },
+  { name: "Fes-te soci/a", path: "/join" },
+  { name: "Contacte", path: "/contact" },
 ];
-const settings = [
-  { name: "Profile", path: "/profile"},
-  { name: "Account", path: "/account"},
-  { name: "Dashboard", path: "/dashboard"},
-  { name: "Logout", path: "/logout"}
+
+// Opcions privades per a usuaris autenticats
+const privateSettings = [
+  { name: "Perfil", path: "/profile" },
+  { name: "Account", path: "/account" },
+  { name: "Zona d'administrador", path: "/dashboard" },
+  { name: "Surt", path: "/logout" },
 ];
 
 function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null,
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null,
-  );
+  const navigate = useNavigate();
+
+  // Estat d'autenticació 
+  // TODO: ajustar segons AuthContext
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+  // Estats per als modals d'autenticació
+  const [isLoginOpen, setIsLoginOpen] = React.useState(false);
+  const [isForgotOpen, setIsForgotOpen] = React.useState(false);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -54,6 +66,41 @@ function Header() {
     setAnchorElUser(null);
   };
 
+  // Clic a una opció
+  const handleUserMenuItemClick = (settingName: string, path?: string) => {
+    handleCloseUserMenu();
+    if (settingName === "Accés Admin") {
+      setIsLoginOpen(true);
+    } else if (settingName === "Surt") {
+      setIsLoggedIn(false);
+      navigate("/");
+    } else if (path) {
+      navigate(path);
+    }
+  };
+
+  // Transicions entre Modals Login i Recuperació de contrasenya
+  const handleOpenForgot = () => {
+    setIsLoginOpen(false);
+    setIsForgotOpen(true);
+  };
+
+  const handleBackToLogin = () => {
+    setIsForgotOpen(false);
+    setIsLoginOpen(true);
+  };
+
+  const handleLoginSuccess = (userData: { email: string }) => {
+    console.log("Sessió iniciada per:", userData.email);
+    setIsLoggedIn(true);
+    navigate("/dashboard");
+  };
+
+  // Només es mostra "Accés Admin" si no s'ha iniciat sessió; en cas contrari, es mostren les privades
+  const visibleSettings = isLoggedIn
+    ? privateSettings
+    : [{ name: "Accés Admin" }];
+
   return (
     <header>
       <AppBar
@@ -62,13 +109,11 @@ function Header() {
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
-            <Link to="/">
+            <Link to="/" style={{ textDecoration: "none", color: "inherit", display: "flex", alignItems: "center" }}>
               <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
               <Typography
                 variant="h6"
                 noWrap
-                component="a"
-                href="#app-bar-with-responsive-menu"
                 sx={{
                   mr: 2,
                   display: { xs: "none", md: "flex" },
@@ -82,6 +127,8 @@ function Header() {
                 Proaniplan
               </Typography>
             </Link>
+
+            {/* Menú en pantalles petites */}
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
               <IconButton
                 size="large"
@@ -111,7 +158,7 @@ function Header() {
               >
                 {pages.map(({ name, path }) => (
                   <MenuItem key={name} onClick={handleCloseNavMenu}>
-                    <Link to={path}>
+                    <Link to={path} style={{ textDecoration: "none", color: "inherit" }}>
                       <Typography sx={{ textAlign: "center" }}>
                         {name}
                       </Typography>
@@ -120,29 +167,29 @@ function Header() {
                 ))}
               </Menu>
             </Box>
+
             <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Typography
               variant="h2"
               noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: "flex", md: "none" },
                 flexGrow: 1,
+                fontSize: "1.5rem",
                 fontWeight: 700,
-                // letterSpacing: ".3rem",
                 color: "text.primary",
                 textDecoration: "none",
               }}
             >
               Proaniplan
             </Typography>
+
+            {/* Navegació escriptori */}
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map(({ name, path }) => (
-                <Link to={path}>
+                <Link key={name} to={path} style={{ textDecoration: "none" }}>
                   <Button
-                    key={name}
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: "white", display: "block" }}
                   >
@@ -151,6 +198,8 @@ function Header() {
                 </Link>
               ))}
             </Box>
+
+            {/* Menú d'usuari / Avatar */}
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -173,13 +222,11 @@ function Header() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map(({name, path}) => (
-                  <MenuItem key={name} onClick={handleCloseNavMenu}>
-                    <Link to={path}>
-                      <Typography sx={{ textAlign: "center" }}>
-                        {name}
-                      </Typography>
-                    </Link>
+                {visibleSettings.map(({ name, path }) => (
+                  <MenuItem key={name} onClick={() => handleUserMenuItemClick(name, path)}>
+                    <Typography sx={{ textAlign: "center", width: "100%" }}>
+                      {name}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -187,7 +234,23 @@ function Header() {
           </Toolbar>
         </Container>
       </AppBar>
+
+      {/* Modal Login */}
+      <LoginModal
+        open={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+        onForgotPasswordClick={handleOpenForgot}
+      />
+
+      {/* Modal Recuperació de contrasenya */}
+      <ForgotPasswordModal
+        open={isForgotOpen}
+        onClose={() => setIsForgotOpen(false)}
+        onBackToLogin={handleBackToLogin}
+      />
     </header>
   );
 }
+
 export default Header;
