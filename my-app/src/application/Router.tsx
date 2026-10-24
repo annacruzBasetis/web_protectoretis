@@ -9,6 +9,7 @@ import JoinPage from "../pages/JoinPage";
 import MissingPage from "../pages/MissingPage";
 import VolunteeringPage from "../pages/VolunteeringPage";
 import DashboardPage from "../pages/DashboardPage";
+import ResetPasswordPage from "../pages/ResetPasswordPage";
 
 const Router = () => {
   return (
@@ -24,6 +25,7 @@ const Router = () => {
                 <Route path='/missing' element={<MissingPage/>}/>
                 <Route path='/volunteering' element={<VolunteeringPage/>}/>
                 <Route path='/dashboard' element={<DashboardPage/>}/>
+                <Route path='/resetpassword' element={<ResetPasswordPage/>}/>
             </Routes>
         </BrowserRouter>
   )
