@@ -18,10 +18,8 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  TextField,
   Tooltip,
 } from '@mui/material';
-
 import {
   LocationOn as LocationOnIcon,
   MedicalServices as MedicalServicesIcon,
@@ -35,27 +33,14 @@ import {
   DeleteOutlineRounded as DeleteOutlineRoundedIcon,
   CheckCircleOutlined as CheckCircleOutlinedIcon,
   CheckCircle as CheckCircleIcon,
+  Add as AddIcon,
 } from '@mui/icons-material';
 
+import { AdoptFormModal, type AdoptAnimal } from '../components/AdoptFormModal';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
-interface AdoptAnimal {
-  id: number;
-  nom: string;
-  descripcio?: string;
-  dataNaixament?: string;
-  ubicacio?: string;
-  esterilitzat?: boolean;
-  medicacio?: string;
-  vacunes?: string;
-  cronic?: boolean;
-  adoptat?: boolean;
-  fotos?: string[];
-  fotoUrl?: string;
-}
-
-// Component per carrusel
+//Component per carrusel
 const ImageCarousel = ({ fotos, nom }: { fotos: string[]; nom: string }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -138,7 +123,7 @@ const ImageCarousel = ({ fotos, nom }: { fotos: string[]; nom: string }) => {
   );
 };
 
-// Component per a cada card
+//Component per a cada card.
 interface AnimalCardProps {
   animal: AdoptAnimal;
   isLoggedIn: boolean;
@@ -147,7 +132,13 @@ interface AnimalCardProps {
   onToggleAdoptat: (id: number) => void;
 }
 
-const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: AnimalCardProps) => {
+const AnimalCard = ({
+  animal,
+  isLoggedIn,
+  onEdit,
+  onDelete,
+  onToggleAdoptat,
+}: AnimalCardProps) => {
   const [expanded, setExpanded] = useState(false);
 
   const edatText = (() => {
@@ -155,7 +146,7 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
     const anyNaixament = new Date(animal.dataNaixament).getFullYear();
     const anyActual = new Date().getFullYear();
     const edat = anyActual - anyNaixament;
-    if (edat <= 0) return "Menys d'1 any";
+    if (edat <= 0) return "Menys d'1 any"; //TODO: adaptar per mostrar mesos
     return `${edat} ${edat === 1 ? 'any' : 'anys'}`;
   })();
 
@@ -181,7 +172,7 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
           overflow: 'hidden',
         }}
       >
-        {/* Capa translúcida per quan està adoptat */}
+        {/* Capa transllúcida per "Adoptat!" */}
         {animal.adoptat && (
           <Box
             sx={{
@@ -214,12 +205,12 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
                 backgroundColor: 'rgba(0,0,0,0.5)',
               }}
             >
-              ¡ADOPTAT!
+              ADOPTAT!
             </Typography>
           </Box>
         )}
 
-        {/* Capçalera amb Nom i Accions d'administració */}
+        {/* Capçalera de card */}
         <Box
           sx={{
             p: 1.5,
@@ -228,9 +219,10 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            zIndex: 6, // Es manté interactiu fins i tot si està adoptat
+            zIndex: 6,
           }}
         >
+          {/*Nom */}
           <Typography
             variant="h2"
             sx={{
@@ -245,12 +237,12 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
             {animal.nom}
           </Typography>
 
-          {isLoggedIn && (
+          {isLoggedIn && ( //Nomès els usuaris logejats poden veure els botons
             <Box sx={{ display: 'flex', gap: 0.5 }}>
               <Tooltip title={animal.adoptat ? 'Desmarcar com adoptat' : 'Marcar com adoptat'}>
                 <IconButton
                   size="small"
-                  onClick={() => onToggleAdoptat(animal.id)}
+                  onClick={() => onToggleAdoptat(animal.id!)}
                   sx={{ color: animal.adoptat ? 'success.dark' : 'text.primary' }}
                 >
                   {animal.adoptat ? <CheckCircleIcon fontSize="small" /> : <CheckCircleOutlinedIcon fontSize="small" />}
@@ -264,7 +256,7 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
               </Tooltip>
 
               <Tooltip title="Eliminar animal">
-                <IconButton size="small" onClick={() => onDelete(animal.id)} sx={{ color: 'error.main' }}>
+                <IconButton size="small" onClick={() => onDelete(animal.id!)} sx={{ color: 'error.main' }}>
                   <DeleteOutlineRoundedIcon fontSize="small" />
                 </IconButton>
               </Tooltip>
@@ -272,18 +264,18 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
           )}
         </Box>
 
-        {/* Carrusel */}
+        {/*Carrusel */}
         <ImageCarousel fotos={llistaFotos} nom={animal.nom} />
 
         <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, flexGrow: 1 }}>
-          {/* Edat */}
+          {/*Edat */}
           {edatText && (
             <Typography variant="h3" sx={{ fontSize: '1.1rem', color: 'text.primary' }}>
               {edatText}
             </Typography>
           )}
 
-          {/* Ubicació */}
+          {/*Ubicació */}
           {animal.ubicacio && (
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'text.secondary' }}>
               <LocationOnIcon color="error" fontSize="small" />
@@ -291,7 +283,7 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
             </Box>
           )}
 
-          {/* Esterilitzat i Crònic */}
+          {/* Esterilitzat i Crónic */}
           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
             {animal.esterilitzat !== undefined && (
               <Chip
@@ -312,7 +304,7 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
             )}
           </Box>
 
-          {/* Botó Veure més */}
+          {/* Veure més / Veure menys" */}
           {teDetallsDetallats && (
             <Button
               size="small"
@@ -324,7 +316,7 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
             </Button>
           )}
 
-          {/* Desplegable de detalls */}
+          {/* Desplegable amb el Collapse */}
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <Divider sx={{ my: 1 }} />
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
@@ -348,7 +340,7 @@ const AnimalCard = ({ animal, isLoggedIn, onEdit, onDelete, onToggleAdoptat }: A
                 </Box>
               )}
 
-              {/* Descripció */}
+              {/*Descripció */}
               {animal.descripcio && (
                 <Typography variant="body2" color="text.primary">
                   <strong>Descripció:</strong> {animal.descripcio}
@@ -388,12 +380,14 @@ const AdoptPage = () => {
   const [animals, setAnimals] = useState<AdoptAnimal[]>([]);
   const [carregant, setCarregant] = useState(true);
 
-  // Estat d'autenticació (canviar segons el teu context/auth hook)
+  // Estat d'autenticació 
+  // TODO: canviar segons el auth hook
   const [isLoggedIn] = useState(true);
 
-  // Estats per als diàlegs
+  // Diàlegs
   const [animalAEliminar, setAnimalAEliminar] = useState<number | null>(null);
-  const [animalAEditar, setAnimalAEditar] = useState<AdoptAnimal | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingAnimal, setEditingAnimal] = useState<AdoptAnimal | null>(null);
 
   useEffect(() => {
     const dadesExemple: AdoptAnimal[] = [
@@ -448,12 +442,14 @@ const AdoptPage = () => {
   }, []);
 
   // Handlers
+  // Adopció
   const handleToggleAdoptat = (id: number) => {
     setAnimals((prev) =>
       prev.map((a) => (a.id === id ? { ...a, adoptat: !a.adoptat } : a))
     );
   };
 
+  // Confirmar eliminació
   const handleConfirmDelete = () => {
     if (animalAEliminar !== null) {
       setAnimals((prev) => prev.filter((a) => a.id !== animalAEliminar));
@@ -461,12 +457,32 @@ const AdoptPage = () => {
     }
   };
 
-  const handleSaveEdit = () => {
-    if (animalAEditar) {
+  // Modal d'edició / creació
+  const handleOpenCreate = () => {
+    setEditingAnimal(null); // Modo crear
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEdit = (animal: AdoptAnimal) => {
+    setEditingAnimal(animal); // Modo editar
+    setIsModalOpen(true);
+  };
+
+  // Handler unificat per Crear o Editar
+  const handleSaveAnimal = (formData: any) => {
+    if (formData.id) {
+      // Editar
       setAnimals((prev) =>
-        prev.map((a) => (a.id === animalAEditar.id ? animalAEditar : a))
+        prev.map((item) => (item.id === formData.id ? { ...item, ...formData } : item))
       );
-      setAnimalAEditar(null);
+    } else {
+      // Crear nou
+      const nouAnimal: AdoptAnimal = {
+        ...formData,
+        id: Date.now(),
+        adoptat: false,
+      };
+      setAnimals((prev) => [nouAnimal, ...prev]);
     }
   };
 
@@ -484,6 +500,14 @@ const AdoptPage = () => {
         </Box>
 
         <Container maxWidth="lg" sx={{ pb: 10 }}>
+          {isLoggedIn && (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+              <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenCreate}>
+                Añadir nueva mascota
+              </Button>
+            </Box>
+          )}
+
           {carregant ? (
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 5 }}>
               <CircularProgress />
@@ -495,7 +519,7 @@ const AdoptPage = () => {
                   key={animal.id}
                   animal={animal}
                   isLoggedIn={isLoggedIn}
-                  onEdit={(item) => setAnimalAEditar(item)}
+                  onEdit={handleOpenEdit}
                   onDelete={(id) => setAnimalAEliminar(id)}
                   onToggleAdoptat={handleToggleAdoptat}
                 />
@@ -515,57 +539,20 @@ const AdoptPage = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setAnimalAEliminar(null)}>Cancel·lar</Button>
+          <Button onClick={() => setAnimalAEliminar(null)}>No eliminar</Button>
           <Button onClick={handleConfirmDelete} color="error" variant="contained">
             Eliminar
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* Modal per Editar dades */}
-      <Dialog open={Boolean(animalAEditar)} onClose={() => setAnimalAEditar(null)} fullWidth maxWidth="sm">
-        <DialogTitle>Editar {animalAEditar?.nom}</DialogTitle>
-        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 2 }}>
-          <TextField
-            label="Nom"
-            fullWidth
-            value={animalAEditar?.nom || ''}
-            onChange={(e) => setAnimalAEditar((prev) => prev ? { ...prev, nom: e.target.value } : null)}
-          />
-          <TextField
-            label="Ubicació"
-            fullWidth
-            value={animalAEditar?.ubicacio || ''}
-            onChange={(e) => setAnimalAEditar((prev) => prev ? { ...prev, ubicacio: e.target.value } : null)}
-          />
-          <TextField
-            label="Medicació"
-            fullWidth
-            value={animalAEditar?.medicacio || ''}
-            onChange={(e) => setAnimalAEditar((prev) => prev ? { ...prev, medicacio: e.target.value } : null)}
-          />
-          <TextField
-            label="Vacunes"
-            fullWidth
-            value={animalAEditar?.vacunes || ''}
-            onChange={(e) => setAnimalAEditar((prev) => prev ? { ...prev, vacunes: e.target.value } : null)}
-          />
-          <TextField
-            label="Descripció"
-            fullWidth
-            multiline
-            rows={3}
-            value={animalAEditar?.descripcio || ''}
-            onChange={(e) => setAnimalAEditar((prev) => prev ? { ...prev, descripcio: e.target.value } : null)}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setAnimalAEditar(null)}>Cancel·lar</Button>
-          <Button onClick={handleSaveEdit} variant="contained" color="primary">
-            Guardar canvis
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {/* Modal centralitzat per Crear / Editar */}
+      <AdoptFormModal
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleSaveAnimal}
+        initialData={editingAnimal}
+      />
     </>
   );
 };
