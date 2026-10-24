@@ -29,8 +29,7 @@ const pages = [
 const settings = [
   { name: "Profile", path: "/profile"},
   { name: "Account", path: "/account"},
-  { name: "Dashboard", path: "/dashboard"},
-  { name: "Logout", path: "/logout"}
+  { name: "Dashboard", path: "/dashboard"}
 ];
 
 function Header() {
@@ -185,11 +184,10 @@ function Header() {
                         {name}
                       </Typography>
                     </Link>
+                    
                   </MenuItem>
                 ))}
-              </Menu>
-            </Box> 
-            <Box sx={{ display: "flex", justifyContent: "space-between", padding: 2, alignItems: "center" }}>
+                            <Box sx={{ display: "flex", justifyContent: "space-between", padding: 2, alignItems: "center" }}>
                {user ? (
                   <Button variant="contained" color="error" onClick={logout}>
                     Logout
@@ -200,6 +198,9 @@ function Header() {
                   </Button>
                 )}
             </Box>
+              </Menu>
+            </Box> 
+
           </Toolbar>
         </Container>
       </AppBar>
