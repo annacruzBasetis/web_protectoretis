@@ -13,6 +13,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link } from "react-router-dom";
+import { useAuth } from '../services/useAuth'
+
 
 const pages = [
   { name: "Adopta", path: "/adopt" },
@@ -27,11 +29,13 @@ const pages = [
 const settings = [
   { name: "Profile", path: "/profile"},
   { name: "Account", path: "/account"},
-  { name: "Dashboard", path: "/dashboard"},
-  { name: "Logout", path: "/logout"}
+  { name: "Dashboard", path: "/user/dashboard"}
 ];
 
 function Header() {
+
+  const { user, login, logout } = useAuth();
+  
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null,
   );
@@ -180,13 +184,27 @@ function Header() {
                         {name}
                       </Typography>
                     </Link>
+                    
                   </MenuItem>
                 ))}
-              </Menu>
+                            <Box sx={{ display: "flex", justifyContent: "space-between", padding: 2, alignItems: "center" }}>
+               {user ? (
+                  <Button variant="contained" color="error" onClick={logout}>
+                    Logout
+                  </Button>
+                ) : (
+                  <Button variant="contained" color="primary" onClick={login}>
+                    Login
+                  </Button>
+                )}
             </Box>
+              </Menu>
+            </Box> 
+
           </Toolbar>
         </Container>
       </AppBar>
+     
     </header>
   );
 }
