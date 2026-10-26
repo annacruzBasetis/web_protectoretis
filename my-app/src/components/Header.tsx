@@ -17,6 +17,9 @@ import { Link, useNavigate } from "react-router-dom";
 // Modals centralitzats
 import { LoginModal } from "./LoginModal";
 import { ForgotPasswordModal } from "./ForgotPasswordModal";
+import { Link } from "react-router-dom";
+import { useAuth } from '../services/useAuth'
+
 
 const pages = [
   { name: "Adopta", path: "/adopt" },
@@ -50,6 +53,22 @@ function Header() {
   // Estats per als modals d'autenticació
   const [isLoginOpen, setIsLoginOpen] = React.useState(false);
   const [isForgotOpen, setIsForgotOpen] = React.useState(false);
+const settings = [
+  { name: "Profile", path: "/profile"},
+  { name: "Account", path: "/account"},
+  { name: "Dashboard", path: "/user/dashboard"}
+];
+
+function Header() {
+
+  const { user, login, logout } = useAuth();
+  
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null,
+  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null,
+  );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -227,10 +246,30 @@ function Header() {
                     <Typography sx={{ textAlign: "center", width: "100%" }}>
                       {name}
                     </Typography>
+                {settings.map(({name, path}) => (
+                  <MenuItem key={name} onClick={handleCloseNavMenu}>
+                    <Link to={path}>
+                      <Typography sx={{ textAlign: "center" }}>
+                        {name}
+                      </Typography>
+                    </Link>
+                    
                   </MenuItem>
                 ))}
-              </Menu>
+                            <Box sx={{ display: "flex", justifyContent: "space-between", padding: 2, alignItems: "center" }}>
+               {user ? (
+                  <Button variant="contained" color="error" onClick={logout}>
+                    Logout
+                  </Button>
+                ) : (
+                  <Button variant="contained" color="primary" onClick={login}>
+                    Login
+                  </Button>
+                )}
             </Box>
+              </Menu>
+            </Box> 
+
           </Toolbar>
         </Container>
       </AppBar>
@@ -249,6 +288,7 @@ function Header() {
         onClose={() => setIsForgotOpen(false)}
         onBackToLogin={handleBackToLogin}
       />
+     
     </header>
   );
 }

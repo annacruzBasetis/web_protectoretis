@@ -10,6 +10,7 @@ import MissingPage from "../pages/MissingPage";
 import VolunteeringPage from "../pages/VolunteeringPage";
 import DashboardPage from "../pages/DashboardPage";
 import ResetPasswordPage from "../pages/ResetPasswordPage";
+import DashboardErrorPage from "../pages/DashboardErrorPage";
 
 const Router = () => {
   return (
@@ -26,6 +27,8 @@ const Router = () => {
                 <Route path='/volunteering' element={<VolunteeringPage/>}/>
                 <Route path='/dashboard' element={<DashboardPage/>}/>
                 <Route path='/resetpassword' element={<ResetPasswordPage/>}/>
+                <Route path='/user/dashboard' element={<DashboardPage/>}/>
+                <Route path='/user/error' element={<DashboardErrorPage/>}/>
             </Routes>
         </BrowserRouter>
   )
