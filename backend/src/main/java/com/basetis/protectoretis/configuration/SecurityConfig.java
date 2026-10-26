@@ -4,24 +4,27 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import com.basetis.protectoretis.service.CustomOAuth2UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final ClientRegistrationRepository clientRegistrationRepository;
 
-    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService) {
+    public SecurityConfig(CustomOAuth2UserService customOAuth2UserService,
+                          ClientRegistrationRepository clientRegistrationRepository) {
         this.customOAuth2UserService = customOAuth2UserService;
+        this.clientRegistrationRepository = clientRegistrationRepository;
     }
 
     @Bean
@@ -40,19 +43,27 @@ public class SecurityConfig {
                 .userInfoEndpoint(userInfo -> userInfo
                     .oidcUserService(customOAuth2UserService)
                 )
+                .authorizationEndpoint(authorization -> {
+                    // Afegim prompt=select_account perquè Google sempre mostri el selector de compte.
+                    // Això evita que Google reautentiqui silenciosament amb la sessió activa.
+                    var resolver = new DefaultOAuth2AuthorizationRequestResolver(
+                        clientRegistrationRepository, "/oauth2/authorization"
+                    );
+                    resolver.setAuthorizationRequestCustomizer(
+                        OAuth2AuthorizationRequestCustomizers.withPkce()
+                            .andThen(r -> r.additionalParameters(params -> params.put("prompt", "select_account")))
+                    );
+                    authorization.authorizationRequestResolver(resolver);
+                })
                 .defaultSuccessUrl("http://localhost:5173/user/dashboard", true)
                 .failureUrl("http://localhost:5173/user/error")
-                
-            
             )
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .invalidateHttpSession(true)
                 .clearAuthentication(true)
                 .deleteCookies("JSESSIONID")
-                .logoutSuccessHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                })
+                .logoutSuccessUrl("http://localhost:5173/")
             );
 
         return http.build();

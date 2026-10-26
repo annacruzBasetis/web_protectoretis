@@ -9,11 +9,15 @@ const DashboardErrorPage = () => {
   const navigate = useNavigate();
  
   const {login, logout} = useAuth();
-  const handleAdminGoogleLogin = () => {
-   //borrar cookie JSESSIONID
+  const handleAdminGoogleLogin = async () => {
+    // Netejar la sessió de Spring (si n'hi ha) abans de re-autenticar amb Google
+    await fetch("http://localhost:8080/logout", {
+      method: "GET",
+      credentials: "include",
+      redirect: "manual", // evitem que el navegador segueixi el redirect a localhost:5173
+    }).catch(() => {/* ignorar errors si ja no hi ha sessió */});
     login();
-      
-    }  
+  };
 
   return (
     <>
