@@ -31,8 +31,7 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Aplica la configuración CORS
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login/**", "/oauth2/**", "/error", "/logout").permitAll()
-                // CAMBIAR ESO A TODAS LAS PAGINAS AUTORIZADAS SIN LOGUEAR
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // TODAS LAS PAGINAS AUTORIZADAS SIN LOGUEAR
                 .requestMatchers("/user/**").authenticated()
                 .anyRequest().authenticated()
             )
