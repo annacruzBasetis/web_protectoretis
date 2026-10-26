@@ -1,3 +1,32 @@
+import React, { useState } from 'react';
+import {
+  Box,
+  Container,
+  Typography,
+  Card,
+  CardActionArea,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Button,
+  Alert,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Stack,
+  DialogContentText,
+  Chip,
+} from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import {Box, Container, Typography, Card, CardActionArea, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, FormControlLabel, Checkbox, Stack, DialogContentText, Chip, Autocomplete} from '@mui/material';
 import PetsIcon from '@mui/icons-material/Pets';
@@ -8,6 +37,7 @@ import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { AdoptFormModal, type AdoptAnimal } from '../components/AdoptFormModal';
 import { useAuth } from '../services/useAuth'
 import { userService } from '../services/userService';
 import DashboardErrorPage from './DashboardErrorPage';
@@ -37,15 +67,6 @@ const DashboardPage = () => {
   useEffect(() => {callAllUsers()},[])
 
 
-  // Listat de vacunes
-  const vacunasCatalogo = [
-  'Rabia',
-  'Polivalente canina (DHPPi)',
-  'Trivalente felina',
-  'Leucemia felina (FeLV)',
-  'Mixomatosis',
-];
-
   // Estats dels modals
   const [activeModal, setActiveModal] = useState<'adopt' | 'missing' | 'admin' | null>(null);
 
@@ -55,18 +76,6 @@ const DashboardPage = () => {
   const [passwordError, setPasswordError] = useState(false);
 
   // Estats dels formularis 
-  const [adoptData, setAdoptData] = useState({
-    nom: '',
-    dataNaixament: '',
-    ubicacio: '',
-    esterilitzat: false,
-    cronic: false,
-    medicacio: '',
-    vacunes: [] as string[],
-    descripcio: '',
-    fotos: [] as File[],
-  });
-
   const [missingData, setMissingData] = useState({
     nom: '',
     descripcio: '',
@@ -85,22 +94,6 @@ const DashboardPage = () => {
 
   const handleCloseModal = () => {
     setActiveModal(null);
-  };
-
-  // Maneig dels arxius de Adopta
-  const handleAdoptImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const selectedFiles = Array.from(e.target.files);
-      setAdoptData({
-        ...adoptData,
-        fotos: [...adoptData.fotos, ...selectedFiles],
-      });
-    }
-  };
-
-  const handleRemoveAdoptImage = (index: number) => {
-    const updatedFotos = adoptData.fotos.filter((_, i) => i !== index);
-    setAdoptData({ ...adoptData, fotos: updatedFotos });
   };
 
   // Maneig dels arxius de Perdut
@@ -151,25 +144,9 @@ const DashboardPage = () => {
   };
 
   // Enviament de form
-  const handleSubmitAdopt = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Quan conectem amb Spring Boot, enviarem un FormData amb les imatges:
-    // const formData = new FormData();
-    // adoptData.fotos.forEach((foto) => formData.append('fotos', foto));
-    console.log('Enviando adopción:', adoptData);
-
-    setAdoptData({
-      nom: '',
-      dataNaixament: '',
-      ubicacio: '',
-      esterilitzat: false,
-      cronic: false,
-      medicacio: '',
-      vacunes: [],
-      descripcio: '',
-      fotos: [],
-    });
+  const handleSubmitAdopt = (formData: Omit<AdoptAnimal, 'id'> & { id?: number }) => {
+    // Quan conectem amb Spring Boot, enviarem un FormData amb les dades i imatges
+    console.log('Enviando adopción centralizada:', formData);
     handleCloseModal();
   };
 
@@ -375,132 +352,14 @@ const DashboardPage = () => {
         </Dialog>
 
         {/* ================================================================= */}
-        {/* Modal afegir adopció */}
+        {/* Modal afegir adopció (Centralitzat amb AdoptFormModal)              */}
         {/* ================================================================= */}
-        <Dialog open={activeModal === 'adopt'} onClose={handleCloseModal} maxWidth="sm" fullWidth>
-          <Box component="form" onSubmit={handleSubmitAdopt}>
-            <DialogTitle sx={{ backgroundColor: 'primary.main', color: 'text.primary', fontWeight: 'bold' }}>
-              Añadir Mascota en Adopción
-            </DialogTitle>
-            <DialogContent dividers>
-              <Stack spacing={2} sx={{ mt: 1 }}>
-                <TextField
-                  label="Nombre del animal"
-                  required
-                  fullWidth
-                  value={adoptData.nom}
-                  onChange={(e) => setAdoptData({ ...adoptData, nom: e.target.value })}
-                />
-                
-                {/* Adjuntar fotos */}
-                <Box>
-                  <Button
-                    variant="outlined"
-                    component="label"
-                    startIcon={<CloudUploadIcon />}
-                    fullWidth
-                  >
-                    Subir una o varias fotos
-                    <input
-                      type="file"
-                      hidden
-                      multiple
-                      accept="image/*"
-                      onChange={handleAdoptImageChange}
-                    />
-                  </Button>
-
-                  {/* Listat d'imatges adjuntes */}
-                  {adoptData.fotos.length > 0 && (
-                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 1.5 }}>
-                      {adoptData.fotos.map((file, index) => (
-                        <Chip
-                          key={index}
-                          label={file.name}
-                          onDelete={() => handleRemoveAdoptImage(index)}
-                          size="small"
-                          color="primary"
-                          variant="outlined"
-                        />
-                      ))}
-                    </Box>
-                  )}
-                </Box>
-
-                <TextField
-                  label="Fecha de nacimiento"
-                  type="date"
-                  slotProps={{ inputLabel: { shrink: true } as any }}
-                  required
-                  fullWidth
-                  value={adoptData.dataNaixament}
-                  onChange={(e) => setAdoptData({ ...adoptData, dataNaixament: e.target.value })}
-                />
-                <TextField
-                  label="Ubicación (ej: Casa de acogida - Barcelona)"
-                  fullWidth
-                  value={adoptData.ubicacio}
-                  onChange={(e) => setAdoptData({ ...adoptData, ubicacio: e.target.value })}
-                />
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={adoptData.esterilitzat}
-                        onChange={(e) => setAdoptData({ ...adoptData, esterilitzat: e.target.checked })}
-                      />
-                    }
-                    label="Esterilizado/a"
-                  />
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={adoptData.cronic}
-                        onChange={(e) => setAdoptData({ ...adoptData, cronic: e.target.checked })}
-                      />
-                    }
-                    label="Tratamiento Crónico"
-                  />
-                </Box>
-                <TextField
-                  label="Medicación"
-                  fullWidth
-                  value={adoptData.medicacio}
-                  onChange={(e) => setAdoptData({ ...adoptData, medicacio: e.target.value })}
-                />
-                {/* Desplegable de Vacunas (Selección + Texto libre) */}
-                <Autocomplete
-                  multiple
-                  freeSolo
-                  options={vacunasCatalogo}
-                  value={adoptData.vacunes}
-                  onChange={(_, newValue) => {
-                  setAdoptData({ ...adoptData, vacunes: newValue as string[] });
-                    }}
-                  renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    label="Vacunas"
-                    placeholder="Selecciona o escribe una nueva y pulsa Enter"
-                      />
-                    )}
-                  />
-                <TextField
-                  label="Descripción"
-                  multiline
-                  rows={3}
-                  fullWidth
-                  value={adoptData.descripcio}
-                  onChange={(e) => setAdoptData({ ...adoptData, descripcio: e.target.value })}
-                />
-              </Stack>
-            </DialogContent>
-            <DialogActions sx={{ p: 2 }}>
-              <Button onClick={handleCloseModal} color="inherit">Cancelar</Button>
-              <Button type="submit" variant="contained">Guardar Adopción</Button>
-            </DialogActions>
-          </Box>
-        </Dialog>
+        <AdoptFormModal
+          open={activeModal === 'adopt'}
+          onClose={handleCloseModal}
+          onSubmit={handleSubmitAdopt}
+          initialData={null}
+        />
 
         {/* ================================================================= */}
         {/* Modal afegir animal perdut */}
