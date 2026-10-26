@@ -7,6 +7,8 @@ import com.basetis.protectoretis.mapper.UserMapper;
 import com.basetis.protectoretis.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -39,4 +41,16 @@ public class UserService {
             .map(user -> new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getCreatedAt()))
             .toList();
     }
+
+    public void deleteUserById(Long id) {
+    User user = userRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found ID: " + id));
+
+    // Bloqueo de seguridad: evitar borrar el administrador principal
+    if (ADMIN_EMAIL.equalsIgnoreCase(user.getEmail())) {
+        throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No se puede eliminar el administrador maestro.");
+    }
+
+    userRepository.delete(user);
+}
 }

@@ -38,6 +38,13 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+    userService.deleteUserById(id);
+    return ResponseEntity.noContent().build(); // Return 204 No Content
+    }
+
+
     @GetMapping("/dashboard")
     public ResponseEntity<?> getDashboardUser(@AuthenticationPrincipal OidcUser principal) {
         if (principal == null) {

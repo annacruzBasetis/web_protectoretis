@@ -1,10 +1,10 @@
+import type { DirectionsTransitFilledOutlined } from "@mui/icons-material";
+
 const API_URL = "http://localhost:8080";
 
 interface User {
-//  id: number;
   name: string;
   email: string;
-//  createdAt: string;
 }
 
 export const userService = () => {
@@ -33,6 +33,17 @@ export const userService = () => {
     return await response.json();
   }
   
+  const deleteUser = async (id: number) => {
+    const response = await fetch(`${API_URL}/user/${id}`, {
+    method: "DELETE",
+    credentials: "include",
+  });
 
-  return { getAll, create }
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Error ${response.status}: ${errorText || "No se pudo eliminar el usuario"}`);
+  }
+  }
+
+  return { getAll, create, deleteUser }
 };

@@ -32,7 +32,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login/**", "/oauth2/**", "/error", "/logout").permitAll()
                 // TODAS LAS PAGINAS AUTORIZADAS SIN LOGUEAR
-                .requestMatchers("/user/**").authenticated()
+                .requestMatchers("/user, /user/**").authenticated()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2

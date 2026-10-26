@@ -24,7 +24,7 @@ const DashboardPage = () => {
 
   const [admins, setAdmins] = useState<AdminUser[]>([]);
  
-  const { getAll, create } = userService();
+  const { getAll, create, deleteUser } = userService();
 
   const callAllUsers = async () => {
     try {
@@ -141,7 +141,11 @@ const DashboardPage = () => {
     }
 
     if (adminToDelete) {
+      deleteUser(adminToDelete.id);
       setAdmins(admins.filter((admin) => admin.id !== adminToDelete.id));
+     
+      console.log(adminToDelete.id);
+
       handleCloseDeleteDialog();
     }
   };
