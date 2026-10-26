@@ -31,13 +31,14 @@ import PetsIcon from '@mui/icons-material/Pets';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import DeleteIcon from '@mui/icons-material/Delete';
-import LockIcon from '@mui/icons-material/Lock';
 import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { AdoptFormModal, type AdoptAnimal } from '../components/AdoptFormModal';
+import { useAuth } from '../services/useAuth'
+import DashboardErrorPage from './DashboardErrorPage';
+
 
 interface AdminUser {
   id: number;
@@ -47,8 +48,6 @@ interface AdminUser {
 }
 
 const DashboardPage = () => {
-  const navigate = useNavigate();
-  const isLoggedIn = true;
 
   // Listat d'administradors
   const [admins, setAdmins] = useState<AdminUser[]>([
@@ -167,28 +166,26 @@ const DashboardPage = () => {
     handleCloseModal();
   };
 
-  if (!isLoggedIn) {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <p>Comprobando sesión...</p>;
+  }
+
+  if (!user) {
     return (
       <>
-        <Header />
-        <main>
-          <Container maxWidth="sm" sx={{ py: 12, textAlign: 'center' }}>
-            <LockIcon sx={{ fontSize: 80, color: 'error.main', mb: 2 }} />
-            <Typography variant="h2" sx={{ mb: 2 }}>Acceso Restringido</Typography>
-            <Alert severity="warning" sx={{ mb: 4 }}>
-              Debes iniciar sesión para acceder a la Zona de Administrador. Solo los administradores pueden iniciar sesión.
-            </Alert>
-            <Button variant="contained" onClick={() => navigate('/')}>Volver al inicio</Button>
-          </Container>
-        </main>
-        <Footer />
+        <DashboardErrorPage/>
       </>
-    );
+    )
   }
+
+  
 
   return (
     <>
-      <Header />
+      <Header/>
+    
       <main>
         <Box sx={{ py: 4, backgroundColor: 'primary.light', textAlign: 'center', mb: 6 }}>
           <Typography variant="h1" color="text.primary">Zona de Administrador</Typography>
