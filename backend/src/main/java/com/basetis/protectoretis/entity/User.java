@@ -23,6 +23,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @Column(name = "password", nullable = true)
     private String password;
 
     @Column(name = "created_at", updatable = false)

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 
-
 @Service
 public class UserService {
     private static final String ADMIN_EMAIL = "protectoretis@gmail.com";

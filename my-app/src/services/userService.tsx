@@ -1,5 +1,12 @@
 const API_URL = "http://localhost:8080";
 
+interface User {
+//  id: number;
+  name: string;
+  email: string;
+//  createdAt: string;
+}
+
 export const userService = () => {
 
   const getAll = async () => {
@@ -13,5 +20,19 @@ export const userService = () => {
     return await response.json();
   }
 
-  return { getAll }
+  const create = async (data: User) => {
+      const response = await fetch(`${API_URL}/user`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json",},
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}`);
+    }
+    return await response.json();
+  }
+  
+
+  return { getAll, create }
 };

@@ -24,7 +24,7 @@ const DashboardPage = () => {
 
   const [admins, setAdmins] = useState<AdminUser[]>([]);
  
-  const { getAll } = userService();
+  const { getAll, create } = userService();
 
   const callAllUsers = async () => {
     try {
@@ -186,19 +186,29 @@ const DashboardPage = () => {
     handleCloseModal();
   };
 
-  const handleSubmitAdmin = (e: React.FormEvent) => {
+  const handleSubmitAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newAdmin: AdminUser = {
-      id: Date.now(),
-      name: adminData.name,
-      email: adminData.email,
-      createdAt: new Date().toISOString().split('T')[0],
-    };
+    try {
+    
+      const createdUser: AdminUser = await create({
+        name: adminData.name,
+        email: adminData.email,
+      });
 
-    setAdmins([...admins, newAdmin]);
-    setAdminData({ name: '', email: '' });
-    handleCloseModal();
+      setAdmins((prevAdmins) => [...(prevAdmins || []), createdUser]);
+
+      setAdminData({ name: '', email: '' });
+      handleCloseModal();
+
+    } catch (error) {
+
+      console.error("Error al registrar el administrador:", error);
+      alert("No se pudo invitar al administrador. Revisa si el email ya existe o tu sesión ha expirado.");
+    
+    }
   };
+
+
 
   const { user, loading } = useAuth();
 
