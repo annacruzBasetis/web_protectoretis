@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+
+
 @Service
 public class UserService {
-
+    private static final String ADMIN_EMAIL = "protectoretis@gmail.com";
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -34,7 +36,7 @@ public class UserService {
     }
 
     public List<UserResponseDto> getAllUsers() {
-    return userRepository.findAll().stream()
+    return userRepository.findByEmailNotIgnoreCase(ADMIN_EMAIL).stream()
             .map(user -> new UserResponseDto(user.getId(), user.getName(), user.getEmail(), user.getCreatedAt()))
             .toList();
     }
