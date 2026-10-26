@@ -4,7 +4,7 @@
 
 -- users
 INSERT INTO "user" (name, email, password, created_at) VALUES
-    ('Admin', 'protectoretis@gmail.com', 'password', '2024-01-15 10:30:00'),
+    ('Admin', 'protectoretis@gmail.com', 'protectoretis12!', '2024-01-15 10:30:00'),
     ('Carlos Blé', 'carlos@example.com', 'scrypt_hashed_password_2', '2024-02-01 14:15:00'),
     ('Ana Martínez', 'ana.martinez@example.com', 'scrypt_hashed_password_3', '2024-03-10 09:00:00'),
     ('Laura Gómez', 'laura.gomez@example.com', 'scrypt_hashed_password_4', CURRENT_TIMESTAMP)
@@ -22,10 +22,10 @@ ON CONFLICT DO NOTHING;
 
 
 -- Animals perduts
-INSERT INTO missingAnimal (nom, descripcio, zona, especie, xip, telContacte, mailContacte, trobat) VALUES
-    ('Toby', 'Perro Beagle con collar rojo. Se asustó con petardos.', 'Parc de la Ciutadella', 'Perro', TRUE, '+34611223344', 'contacto.bobi@email.com', FALSE),
-    ('Kira', 'Gata persa blanca con ojos azules, muy asustadiza.', 'Zona Centro, Valencia', 'Gato', TRUE, '+34655443322', 'maria.loss@email.com', FALSE),
-    ('Todd', 'Pastor Alemán de 5 años. Responde a su nombre.', 'Barrio de Gràcia, Barcelona', 'Perro', FALSE, '+34699887766', 'albert.gracia@email.com', TRUE)
+INSERT INTO missingAnimal (nom, descripcio, zona, especie, xip, telContacte1, telContacte2, mailContacte, trobat) VALUES
+    ('Toby', 'Perro Beagle con collar rojo. Se asustó con petardos.', 'Parc de la Ciutadella', 'Perro', TRUE, '+34611223344', '+34611223344', 'contacto.bobi@email.com', FALSE),
+    ('Kira', 'Gata persa blanca con ojos azules, muy asustadiza.', 'Zona Centro, Valencia', 'Gato', TRUE, '+34655443322', '+34655443322', 'maria.loss@email.com', FALSE),
+    ('Todd', 'Pastor Alemán de 5 años. Responde a su nombre.', 'Barrio de Gràcia, Barcelona', 'Perro', FALSE, '+34699887766', '+34655443322', 'albert.gracia@email.com', TRUE)
 ON CONFLICT DO NOTHING;
 
 

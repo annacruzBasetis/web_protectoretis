@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -30,6 +31,19 @@ public class UserController {
         UserResponseDto response = userService.createUser(dto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+
+    @GetMapping
+    public ResponseEntity<List<UserResponseDto>> getAllUsers() {
+        List<UserResponseDto> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable Long id) {
+    userService.deleteUserById(id);
+    return ResponseEntity.noContent().build(); // Return 204 No Content
+    }
+
 
     @GetMapping("/dashboard")
     public ResponseEntity<?> getDashboardUser(@AuthenticationPrincipal OidcUser principal) {

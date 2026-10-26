@@ -177,24 +177,29 @@ function Header() {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map(({name, path}) => (
+                {user && settings.map(({name, path}) => (
                   <MenuItem key={name} onClick={handleCloseNavMenu}>
                     <Link to={path}>
                       <Typography sx={{ textAlign: "center" }}>
                         {name}
                       </Typography>
-                    </Link>
-                    
+                    </Link>                   
                   </MenuItem>
                 ))}
-                            <Box sx={{ display: "flex", justifyContent: "space-between", padding: 2, alignItems: "center" }}>
+                <Box 
+                sx={{ display: "flex",
+                      justifyContent: "space-between",
+                      padding: 2, 
+                      alignItems: "center" 
+                    }}
+                  >
                {user ? (
                   <Button variant="contained" color="error" onClick={logout}>
-                    Logout
+                    Tanca sessió
                   </Button>
                 ) : (
                   <Button variant="contained" color="primary" onClick={login}>
-                    Login
+                    Zona d'aministrador
                   </Button>
                 )}
             </Box>
