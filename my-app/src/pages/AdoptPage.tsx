@@ -39,6 +39,7 @@ import {
 import { AdoptFormModal, type AdoptAnimal } from '../components/AdoptFormModal';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import { useAuth } from '../services/useAuth'
 
 //Component per carrusel
 const ImageCarousel = ({ fotos, nom }: { fotos: string[]; nom: string }) => {
@@ -126,7 +127,6 @@ const ImageCarousel = ({ fotos, nom }: { fotos: string[]; nom: string }) => {
 //Component per a cada card.
 interface AnimalCardProps {
   animal: AdoptAnimal;
-  isLoggedIn: boolean;
   onEdit: (animal: AdoptAnimal) => void;
   onDelete: (id: number) => void;
   onToggleAdoptat: (id: number) => void;
@@ -134,11 +134,11 @@ interface AnimalCardProps {
 
 const AnimalCard = ({
   animal,
-  isLoggedIn,
   onEdit,
   onDelete,
   onToggleAdoptat,
 }: AnimalCardProps) => {
+  const { user } = useAuth();
   const [expanded, setExpanded] = useState(false);
 
   const edatText = (() => {
@@ -237,7 +237,7 @@ const AnimalCard = ({
             {animal.nom}
           </Typography>
 
-          {isLoggedIn && ( //Nomès els usuaris logejats poden veure els botons
+          {user && ( //Nomès els usuaris logejats poden veure els botons
             <Box sx={{ display: 'flex', gap: 0.5 }}>
               <Tooltip title={animal.adoptat ? 'Desmarcar com adoptat' : 'Marcar com adoptat'}>
                 <IconButton
@@ -379,10 +379,8 @@ const AnimalCard = ({
 const AdoptPage = () => {
   const [animals, setAnimals] = useState<AdoptAnimal[]>([]);
   const [carregant, setCarregant] = useState(true);
-
   // Estat d'autenticació 
-  // TODO: canviar segons el auth hook
-  const [isLoggedIn] = useState(true);
+  const { user } = useAuth();
 
   // Diàlegs
   const [animalAEliminar, setAnimalAEliminar] = useState<number | null>(null);
@@ -500,10 +498,10 @@ const AdoptPage = () => {
         </Box>
 
         <Container maxWidth="lg" sx={{ pb: 10 }}>
-          {isLoggedIn && (
+          {user && (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
               <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenCreate}>
-                Añadir nueva mascota
+                Afegir nova adopció
               </Button>
             </Box>
           )}
@@ -518,7 +516,6 @@ const AdoptPage = () => {
                 <AnimalCard
                   key={animal.id}
                   animal={animal}
-                  isLoggedIn={isLoggedIn}
                   onEdit={handleOpenEdit}
                   onDelete={(id) => setAnimalAEliminar(id)}
                   onToggleAdoptat={handleToggleAdoptat}

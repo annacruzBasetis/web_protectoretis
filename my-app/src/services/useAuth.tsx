@@ -36,17 +36,11 @@ const login = () => {
   };
 
 const logout = () => {
-    fetch(`${API_URL}/logout`, {
-      method: "POST",
-      credentials: "include",
-    })
-      .then((res) => {
-        if (res.ok) {
-          setUser(null); // Al poner user en null, el Header cambiará automáticamente a "Login"
-          window.location.href = "/";
-        }
-      })
-      .catch((err) => console.error(err));
+    // Naveguem directament a l'endpoint de logout de Spring (com fem amb el login).
+    // Així la cookie JSESSIONID s'envia sempre, Spring invalida la sessió,
+    // i el logoutSuccessHandler retorna 200 sense redirigir a Google.
+    setUser(null);
+    window.location.href = `${API_URL}/logout`;
 }
 return { user, loading, login, logout, checkAuth };
 }
