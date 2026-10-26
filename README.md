@@ -45,7 +45,8 @@ services:
             PGDATA: /var/lib/postgresql/data
 
 volumes:
-    postgres: 
+    postgres:
+```
    
 6. **Compila i executa el projecte:**
 
