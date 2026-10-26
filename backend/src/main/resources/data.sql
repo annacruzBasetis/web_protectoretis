@@ -22,10 +22,10 @@ ON CONFLICT DO NOTHING;
 
 
 -- Animals perduts
-INSERT INTO missingAnimal (nom, descripcio, zona, especie, xip, telContacte, mailContacte, trobat) VALUES
-    ('Toby', 'Perro Beagle con collar rojo. Se asustó con petardos.', 'Parc de la Ciutadella', 'Perro', TRUE, '+34611223344', 'contacto.bobi@email.com', FALSE),
-    ('Kira', 'Gata persa blanca con ojos azules, muy asustadiza.', 'Zona Centro, Valencia', 'Gato', TRUE, '+34655443322', 'maria.loss@email.com', FALSE),
-    ('Todd', 'Pastor Alemán de 5 años. Responde a su nombre.', 'Barrio de Gràcia, Barcelona', 'Perro', FALSE, '+34699887766', 'albert.gracia@email.com', TRUE)
+INSERT INTO missingAnimal (nom, descripcio, zona, especie, xip, telContacte1, telContacte2, mailContacte, trobat) VALUES
+    ('Toby', 'Perro Beagle con collar rojo. Se asustó con petardos.', 'Parc de la Ciutadella', 'Perro', TRUE, '+34611223344', '+34611223344', 'contacto.bobi@email.com', FALSE),
+    ('Kira', 'Gata persa blanca con ojos azules, muy asustadiza.', 'Zona Centro, Valencia', 'Gato', TRUE, '+34655443322', '+34655443322', 'maria.loss@email.com', FALSE),
+    ('Todd', 'Pastor Alemán de 5 años. Responde a su nombre.', 'Barrio de Gràcia, Barcelona', 'Perro', FALSE, '+34699887766', '+34655443322', 'albert.gracia@email.com', TRUE)
 ON CONFLICT DO NOTHING;
 
 

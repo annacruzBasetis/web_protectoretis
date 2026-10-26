@@ -33,8 +33,8 @@ class UserServiceTest {
         //ARRANGE
         UserCreateDto createDto = new UserCreateDto(
             "Cleo", 
-            "cleo@cleo.com", 
-            "Hola1@345"
+            "cleo@cleo.com"//, 
+            //"Hola1@345"
         );
 
         User user = new User();

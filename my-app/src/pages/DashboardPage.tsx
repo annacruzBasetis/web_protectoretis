@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {Box, Container, Typography, Card, CardActionArea, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Alert, Dialog, DialogTitle, DialogContent, DialogActions, TextField, FormControlLabel, Checkbox, Stack, DialogContentText, Chip, Autocomplete} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import {Box, Container, Typography, Card, CardActionArea, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Button, Dialog, DialogTitle, DialogContent, DialogActions, TextField, FormControlLabel, Checkbox, Stack, DialogContentText, Chip, Autocomplete} from '@mui/material';
 import PetsIcon from '@mui/icons-material/Pets';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
@@ -9,6 +9,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { useAuth } from '../services/useAuth'
+import { userService } from '../services/userService';
 import DashboardErrorPage from './DashboardErrorPage';
 
 
@@ -18,15 +19,23 @@ interface AdminUser {
   email: string;
   createdAt: string;
 }
-
+ 
 const DashboardPage = () => {
 
-  // Listat d'administradors
-  const [admins, setAdmins] = useState<AdminUser[]>([
-    { id: 1, name: 'Admin General', email: 'admin@example.com', createdAt: '2024-01-15' },
-    { id: 2, name: 'Carlos Blé', email: 'carlos@example.com', createdAt: '2024-02-01' },
-    { id: 3, name: 'Ana Martínez', email: 'ana.martinez@example.com', createdAt: '2024-03-10' },
-  ]);
+  const [admins, setAdmins] = useState<AdminUser[]>([]);
+ 
+  const { getAll, create, deleteUser } = userService();
+
+  const callAllUsers = async () => {
+    try {
+      const data = await getAll();
+      setAdmins(data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  useEffect(() => {callAllUsers()},[])
+
 
   // Listat de vacunes
   const vacunasCatalogo = [
@@ -132,7 +141,11 @@ const DashboardPage = () => {
     }
 
     if (adminToDelete) {
+      deleteUser(adminToDelete.id);
       setAdmins(admins.filter((admin) => admin.id !== adminToDelete.id));
+     
+      console.log(adminToDelete.id);
+
       handleCloseDeleteDialog();
     }
   };
@@ -177,19 +190,29 @@ const DashboardPage = () => {
     handleCloseModal();
   };
 
-  const handleSubmitAdmin = (e: React.FormEvent) => {
+  const handleSubmitAdmin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const newAdmin: AdminUser = {
-      id: Date.now(),
-      name: adminData.name,
-      email: adminData.email,
-      createdAt: new Date().toISOString().split('T')[0],
-    };
+    try {
+    
+      const createdUser: AdminUser = await create({
+        name: adminData.name,
+        email: adminData.email,
+      });
 
-    setAdmins([...admins, newAdmin]);
-    setAdminData({ name: '', email: '' });
-    handleCloseModal();
+      setAdmins((prevAdmins) => [...(prevAdmins || []), createdUser]);
+
+      setAdminData({ name: '', email: '' });
+      handleCloseModal();
+
+    } catch (error) {
+
+      console.error("Error al registrar el administrador:", error);
+      alert("No se pudo invitar al administrador. Revisa si el email ya existe o tu sesión ha expirado.");
+    
+    }
   };
+
+
 
   const { user, loading } = useAuth();
 

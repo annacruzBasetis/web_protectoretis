@@ -34,9 +34,8 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Aplica la configuración CORS
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/", "/login/**", "/oauth2/**", "/error", "/logout").permitAll()
-                // CAMBIAR ESO A TODAS LAS PAGINAS AUTORIZADAS SIN LOGUEAR
-                //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                .requestMatchers("/user/**").authenticated()
+                // TODAS LAS PAGINAS AUTORIZADAS SIN LOGUEAR
+                .requestMatchers("/user, /user/**").authenticated()
                 .anyRequest().authenticated()
             )
             .oauth2Login(oauth2 -> oauth2
@@ -73,7 +72,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true); // Permite enviar cookies/sesiones cruzadas
 

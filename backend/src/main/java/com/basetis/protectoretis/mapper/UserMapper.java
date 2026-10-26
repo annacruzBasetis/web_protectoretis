@@ -12,7 +12,7 @@ public class UserMapper {
         User user = new User();
         user.setName(dto.name());
         user.setEmail(dto.email());
-        user.setPassword(dto.password()); // ENCRYPTTTTTT TODO
+     //   user.setPassword(dto.password()); // ENCRYPTTTTTT TODO
         return user;
     }
 
